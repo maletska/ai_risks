@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="el" data-fluid="yes">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Το εισιτήριο του ταξιδιού</title>
+<style>
+:root{
+  --bg:#FFF6DE;--panel:#FFFDF6;--ink:#14213D;--muted:#5E5B4C;--line:#0A7F99;--sun:#FFC93C;--earth:#8C500A;
+  --rule:#E6DABA;--soft:#F4E8C6;--track:#EFE6CC;--ok:#2E7D4F;--okbg:#E2F1E7;--bad:#B23A2E;--badbg:#F8E2DE;
+  --display:"Comfortaa","Trebuchet MS","Segoe UI",sans-serif;--body:"Ubuntu","Segoe UI",system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg)}
+body{color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit}
+p{margin:0}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* 16:9 stage — 1200×675 design, scaled to the iframe */
+#stage{position:absolute;left:0;top:0;width:1200px;height:675px;transform-origin:0 0;
+  display:flex;flex-direction:column;gap:10px;padding:16px 24px 14px;overflow:hidden;background:var(--bg)}
+
+/* header */
+.hd{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex:none}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--line);line-height:1.2}
+h1{font-family:var(--display);font-size:24px;line-height:1.15;margin:2px 0 0;font-weight:700}
+h2{font-family:var(--display);font-size:17px;line-height:1.2;margin:0;font-weight:700}
+h3{font-family:var(--display);font-size:14.5px;line-height:1.25;margin:0;font-weight:700}
+h2:focus,h3:focus{outline:none}
+.lede{color:var(--muted);font-size:14px}
+.small{font-size:12.5px;color:var(--muted)}
+.credit{font-size:11px;color:var(--muted)}
+
+/* panels & buttons */
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:0}
+.btn,.ghost{font-weight:700;border-radius:10px;border:2px solid transparent;padding:8px 16px;min-height:40px;cursor:pointer;line-height:1.2}
+.btn{background:var(--ink);color:#fff}
+.btn:hover{filter:brightness(1.25)}
+.btn:disabled{opacity:.45;cursor:default;filter:none}
+.ghost{background:transparent;border-color:var(--rule);color:var(--ink)}
+.ghost:hover{background:var(--soft)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row.end{justify-content:space-between}
+.note{background:var(--soft);border-radius:10px;padding:9px 12px;font-size:13.5px}
+.question{font-family:var(--display);font-size:15.5px;font-weight:700;background:var(--soft);border-left:5px solid var(--earth);padding:9px 12px;border-radius:0 10px 10px 0}
+.verdict{background:var(--badbg);color:#6d2219;border-radius:10px;padding:11px 13px;font-size:14px}
+.verdict.ok{background:var(--okbg);color:#1d4f33}
+.verdict strong{display:block;font-family:var(--display);font-size:16px;margin-bottom:3px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:20px;font-size:13px;font-weight:700;background:var(--soft);color:var(--muted)}
+.track{height:16px;background:var(--track);border-radius:8px;overflow:hidden}
+.fill{height:100%;border-radius:8px;transition:width .6s ease,background .6s}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+:root{
+  /* Θέμα «μετρό» του MIND THE ART GAP: χαρτί, ναυτικό μπλε, χρυσό */
+  --bg:#F6F1E4;--panel:#FFFDF7;--ink:#1C2340;--muted:#5B6380;--line:#1D3A8A;--earth:#1D3A8A;
+  --rule:#D9D1BB;--soft:#FFF1BF;--track:#E9E2CF;--ok:#1E8A5A;--okbg:#E6F4EC;--bad:#C0392B;--badbg:#FBE5E1;
+  --gold:#F2B705;--night:#1D3A8A;--fear:#C0392B;--crit:#1E8A5A;--trust:#2D6CDF;--torn:#8E44AD}
+h1{color:var(--night)}
+.eyebrow{color:var(--night)}
+.eyebrow::after{content:"";display:block;width:120px;height:3px;background:var(--gold);margin-top:4px;border-radius:2px}
+h2{color:var(--night)}
+.btn{background:var(--night)} .btn:hover{filter:none;background:#2A4FA8}
+.ghost{border-color:var(--night);color:var(--night)} .ghost:hover{background:var(--soft)}
+.logo{width:44px;height:44px;border-radius:50%;background:var(--night);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px;border:3px solid var(--gold);flex:none}
+.hd-left{display:flex;align-items:center;gap:12px}
+.hd .lede{max-width:600px;font-size:13.5px;padding-top:4px}
+
+.screen{flex:1;min-height:0;display:flex;flex-direction:column}
+.center{max-width:860px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:12px;flex:1;min-height:0;justify-content:center}
+.panel{padding:18px 22px;gap:12px}
+.panel p{font-size:15px}
+
+/* γραμμή-φάσμα */
+.spectrum{margin:4px 0}
+.rail{position:relative;height:12px;border-radius:7px;background:linear-gradient(90deg,var(--fear),var(--crit) 50%,var(--trust))}
+.stops{display:flex;justify-content:space-between;margin-top:6px;font-size:12.5px;font-weight:700}
+.stops span:nth-child(1){color:var(--fear)} .stops span:nth-child(2){color:var(--crit)} .stops span:nth-child(3){color:var(--trust)}
+.train{position:absolute;top:50%;width:34px;height:34px;margin-left:-17px;transform:translateY(-50%);background:#fff;border:3px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-size:17px;transition:left 1.2s cubic-bezier(.2,.8,.2,1)}
+.train.prev{border-style:dashed;opacity:.55}
+label.field{display:block;font-weight:700;font-size:14px}
+input[type=text]{width:100%;max-width:360px;font:inherit;padding:9px 12px;border-radius:10px;border:1.5px solid var(--rule);background:#fff;color:var(--ink)}
+.compare{background:#1d3a8a0d;border-radius:10px;padding:9px 12px;font-size:14px}
+
+/* δηλώσεις */
+.progress{display:flex;gap:4px}
+.progress i{flex:1;height:7px;border-radius:3px;background:var(--track)}
+.progress i.done{background:var(--gold)} .progress i.now{background:var(--night)}
+fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+legend{font-family:var(--display);font-size:22px;font-weight:700;line-height:1.3;padding:0;color:var(--ink)}
+legend:focus{outline:none}
+.station-tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.5px;color:var(--night);background:#1d3a8a14;border-radius:20px;padding:2px 10px;width:max-content}
+.likert{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.likert label{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-size:13px;font-weight:600;padding:12px 6px;border:2px solid var(--rule);border-radius:12px;background:#fff;cursor:pointer;min-height:84px;justify-content:center}
+.likert input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.likert .emo{font-size:26px;line-height:1}
+.likert label:hover{border-color:var(--muted)}
+.likert label:has(input:checked){border-color:var(--night);background:var(--soft);box-shadow:inset 0 0 0 1px var(--night)}
+.likert label:has(input:focus-visible){outline:3px solid var(--ink);outline-offset:2px}
+.kbd{font-size:12px;color:var(--muted)}
+
+/* εισιτήριο */
+.tk-grid{display:grid;grid-template-columns:520px 1fr;gap:18px;flex:1;min-height:0;align-items:start}
+.tk-grid .col{display:flex;flex-direction:column;gap:10px;min-height:0;min-width:0}
+.ticket{position:relative;display:grid;grid-template-columns:1fr 130px;background:linear-gradient(135deg,#FFF8DC,#FFE9A0);border:2px solid var(--ink);border-radius:14px;overflow:hidden;animation:print .7s ease}
+.ticket .main{padding:14px 16px}
+.ticket .stub{border-left:3px dashed var(--ink);padding:14px 10px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:4px;background:#ffffff55}
+.ticket .brand{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--night)}
+.ticket .who{font-size:13px;color:var(--muted);margin:2px 0 6px}
+.ticket .profile{font-family:var(--display);font-size:21px;font-weight:800;margin:0}
+.ticket .profile small{display:block;font-family:var(--body);font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.ticket .motto{font-size:14px;margin:4px 0 0;font-style:italic}
+.ticket .num{font-family:ui-monospace,Consolas,monospace;font-size:13px}
+.ticket .big{font-size:30px}
+@keyframes print{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+.howbox{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:8px 12px;font-size:12.5px;color:var(--muted);line-height:1.4}
+.howbox b{color:var(--ink)}
+.stations{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;overflow:auto;min-height:0}
+.stations li{display:grid;grid-template-columns:18px 1fr;gap:8px;font-size:12.5px;line-height:1.3;background:#fff;border:1px solid var(--rule);border-radius:8px;padding:5px 9px;align-items:start}
+.stations{max-height:200px}
+.dot{width:14px;height:14px;border-radius:50%;border:3px solid var(--night);background:#fff;margin-top:2px}
+.dot.hot{background:var(--gold)}
+.stations b{display:inline}
+.stations b::after{content:" — ";font-weight:400}
+.discuss{border-left:4px solid var(--gold);padding:7px 12px;background:#fff;border-radius:0 8px 8px 0;font-size:13.5px}
+.tk-text{font-size:14px;line-height:1.45}
+
+.cmpbox{background:#fff;border:2px solid var(--night);border-radius:12px;padding:9px 12px;display:flex;flex-direction:column;gap:6px}
+.cmpbox h3{font-size:15px}
+.delta{font-size:13.5px;line-height:1.4}
+.delta b{font-family:var(--display);font-size:17px}
+.chg{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}
+.chg li{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;font-size:12px;line-height:1.25;padding:3px 8px;border-radius:8px;background:var(--bg)}
+.chg li span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chg li.moved{background:var(--soft);border:1px solid var(--gold)}
+.chg li .arr{white-space:nowrap;font-size:13px}
+.chg li .arr b{color:var(--night)}
+.reflect{display:flex;flex-direction:column;gap:5px}
+.reflect label{font-weight:700;font-size:13.5px}
+.reflect textarea{width:100%;min-height:52px;font:inherit;font-size:13.5px;padding:8px 10px;border-radius:10px;border:1.5px solid var(--rule);background:#fff;color:var(--ink);resize:vertical}
+.firstnote{background:var(--soft);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:7px 10px;font-size:13.5px}
+.neutral{font-size:12.5px;color:var(--muted)}
+html.fluid .chg{grid-template-columns:1fr}
+html.fluid .tk-grid{grid-template-columns:1fr}
+html.fluid .likert{grid-template-columns:1fr}
+html.fluid .likert label{flex-direction:row;justify-content:flex-start;min-height:48px;padding:8px 12px;gap:10px;text-align:left}
+html.fluid .ticket{grid-template-columns:1fr}
+html.fluid .ticket .stub{border-left:0;border-top:3px dashed var(--ink);flex-direction:row;justify-content:space-around}
+html.fluid .center{justify-content:flex-start}
+html.fluid .hd{flex-direction:column}
+</style>
+</head>
+<body>
+<div id="stage">
+  <header class="hd">
+    <div class="hd-left"><div class="logo" aria-hidden="true">00</div><div><div class="eyebrow">Στάση 00 · Εισαγωγή</div><h1>Το εισιτήριο του ταξιδιού</h1></div></div>
+    <p class="lede">Πριν ξεκινήσει το ταξίδι του βιβλίου, δες από ποια «αποβάθρα» ξεκινάς εσύ: πόσο φοβάσαι και πόσο εμπιστεύεσαι την Τεχνητή Νοημοσύνη σήμερα. Στο τέλος παίρνεις το εισιτήριό σου — και στον Επίλογο ξανακάνεις τη διαδρομή για να δεις τι άλλαξε.</p>
+  </header>
+
+  <!-- 1. Αρχή -->
+  <section class="screen" id="s-start" aria-labelledby="t-start">
+    <div class="center">
+      <div class="panel">
+        <h2 id="t-start" tabindex="-1">Από ποια αποβάθρα ξεκινάς;</h2>
+        <p>Το βιβλίο θέλει να σε φέρει στη μέση της γραμμής: <strong>ούτε φόβος, ούτε τυφλή εμπιστοσύνη</strong> — κριτική σκέψη.</p>
+        <div class="spectrum" aria-hidden="true"><div class="rail"></div><div class="stops"><span>😨 Φόβος</span><span>🧭 Κριτική σκέψη</span><span>🙈 Τυφλή εμπιστοσύνη</span></div></div>
+        <p class="small">Θα δεις <b>10 δηλώσεις</b> και θα πεις πόσο συμφωνείς. Δεν είναι τεστ και δεν περιγράφει τον χαρακτήρα σου: δείχνει μόνο πού βρίσκονται οι απόψεις σου <b>σήμερα</b>. Απάντησε ειλικρινά — το εισιτήριο είναι για σένα.</p>
+        <div class="row" style="align-items:flex-end;gap:18px">
+          <div><label class="field" for="nick">Όνομα ή ψευδώνυμο (προαιρετικό)</label><input type="text" id="nick" maxlength="24" autocomplete="off" placeholder="π.χ. Αστέρι_17" style="max-width:260px"></div>
+          <div><label class="field" for="code">Κωδικός προηγούμενου εισιτηρίου <span class="small" style="font-weight:400">(μόνο αν ξανακάνεις τη διαδρομή στον Επίλογο)</span></label><input type="text" id="code" maxlength="10" inputmode="numeric" autocomplete="off" placeholder="10 ψηφία" style="max-width:200px;font-family:ui-monospace,Consolas,monospace;letter-spacing:2px"></div>
+        </div>
+        <div id="prev-note" class="compare" hidden></div>
+        <div class="row" style="justify-content:flex-end"><button class="btn" id="go" type="button">Επιβίβαση 🚇</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Δηλώσεις -->
+  <section class="screen" id="s-q" hidden>
+    <div class="center">
+      <div class="panel">
+        <div class="progress" id="progress" aria-hidden="true"></div>
+        <fieldset>
+          <span class="station-tag" id="q-tag"></span>
+          <legend id="q-text" tabindex="-1"></legend>
+          <p class="small" style="margin:0">Πόσο συμφωνείς;</p>
+          <div class="likert" id="likert"></div>
+        </fieldset>
+        <div class="row end"><span class="kbd">Πληκτρολόγιο: 1–5 για απάντηση, Enter για επόμενη</span><div class="row"><button class="ghost" id="back" type="button">← Πίσω</button><button class="btn" id="next" type="button" disabled>Επόμενη →</button></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Εισιτήριο -->
+  <section class="screen" id="s-ticket" hidden aria-labelledby="t-ticket">
+    <div class="tk-grid">
+      <div class="col">
+        <h2 id="t-ticket" tabindex="-1">🎫 Το εισιτήριό σου</h2>
+        <div class="ticket" id="ticket">
+          <div class="main"><div class="brand">MIND THE ART GAP · ΕΙΣΙΤΗΡΙΟ</div><div class="who" id="tk-who"></div><p class="profile" id="tk-profile"></p><p class="motto" id="tk-motto"></p><p class="num" style="margin:6px 0 0">Κωδικός: <b id="tk-code"></b> <span class="small">· κράτησέ τον για τον Επίλογο</span></p></div>
+          <div class="stub"><div class="big" id="tk-emoji" aria-hidden="true"></div><div class="num" id="tk-num"></div><div class="num" id="tk-date"></div><div class="num" id="tk-pos"></div></div>
+        </div>
+        <div class="spectrum" role="img" id="pos-img">
+          <div class="rail"><div class="train prev" id="train-prev" hidden aria-hidden="true">🚃</div><div class="train" id="train" style="left:50%" aria-hidden="true">🚇</div></div>
+          <div class="stops" aria-hidden="true"><span>😨 Φόβος · 0</span><span>🧭 Κριτική σκέψη · 50</span><span>🙈 Τυφλή εμπιστοσύνη · 100</span></div>
+        </div>
+        <p class="neutral">Η «αφετηρία» περιγράφει τις απαντήσεις σου <b>σήμερα</b>, όχι εσένα. Είναι θέση εκκίνησης — και οι θέσεις αλλάζουν.</p>
+        <div class="howbox" id="how"></div>
+        <div class="row"><button class="btn" id="dl" type="button">⬇️ Αποθήκευση εισιτηρίου (εικόνα)</button><button class="ghost" id="again" type="button">🔄 Νέα διαδρομή</button></div>
+      </div>
+      <div class="col" style="height:100%">
+        <p class="tk-text" id="tk-text"></p>
+        <div class="reflect">
+          <label for="note" id="note-label"></label>
+          <textarea id="note" maxlength="300" placeholder="Μία-δύο προτάσεις…"></textarea>
+          <span class="small" id="note-hint"></span>
+        </div>
+        <div id="first-run">
+          <h3>📍 Στάσεις με ιδιαίτερη προσοχή για σένα</h3>
+          <ul class="stations" id="stations"></ul>
+        </div>
+        <div class="cmpbox" id="cmpbox" hidden>
+          <h3>🔁 Αρχή → Επίλογος: τι άλλαξε;</h3>
+          <p class="delta" id="delta"></p>
+          <ul class="chg" id="chg" aria-label="Σύγκριση απαντήσεων ανά δήλωση"></ul>
+          <div class="firstnote" id="firstnote" hidden></div>
+        </div>
+        <div class="discuss" id="discuss"><strong>💬 Για την τάξη:</strong> Σε ποια δήλωση δυσκολεύτηκες περισσότερο να αποφασίσεις; Γιατί;</div>
+        <p class="small" id="later" style="margin-top:auto">Κράτησε τον <b>κωδικό</b> του εισιτηρίου (ή αποθήκευσέ το ως εικόνα). Όταν φτάσεις στον <strong>Επίλογο</strong>, κάνε ξανά τη διαδρομή, γράψε τον κωδικό στην αρχή και δες τι άλλαξε.</p>
+      </div>
+    </div>
+  </section>
+  <div class="sr" aria-live="polite" id="live"></div>
+</div>
+
+<script>
+/* Προσαρμογή της σκηνής 1200×675 στο παράθυρο (iframe).
+   Σε στενές οθόνες (κινητά, tablet κατακόρυφα) οι σελίδες με data-fluid="yes"
+   περνούν σε ρευστή διάταξη αντί να σμικρύνουν το κείμενο σε δυσανάγνωστο μέγεθος. */
+(function(){
+  const W=1200,H=675,st=document.getElementById('stage'),html=document.documentElement;
+  const canFluid=html.dataset.fluid==='yes';
+  function fit(){
+    const fluid=canFluid&&(innerWidth<760||innerWidth<innerHeight*0.9);
+    html.classList.toggle('fluid',fluid);
+    if(fluid){st.style.transform='';st.style.left='';st.style.top='';return;}
+    const s=Math.min(innerWidth/W,innerHeight/H);
+    st.style.transform='scale('+s+')';
+    st.style.left=Math.max(0,(innerWidth-W*s)/2)+'px';
+    st.style.top=Math.max(0,(innerHeight-H*s)/2)+'px';
+  }
+  addEventListener('resize',fit); fit();
+})();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+// dir: +1 = δήλωση «τυφλής εμπιστοσύνης», -1 = δήλωση «φόβου / απόρριψης». Εναλλάσσονται, ώστε να μην έχουν όλες την ίδια φορά.
+const Q=[
+  {text:'Δεν χρειάζεται να ξέρω πώς αποφασίζει μια ΤΝ· αρκεί να δουλεύει.',dir:1,ch:'Κεφ. 1 · Το «Μαύρο Κουτί»',teaser:'Θα δεις γιατί είναι επικίνδυνο να εμπιστευόμαστε αποφάσεις που κανείς δεν μπορεί να εξηγήσει.'},
+  {text:'Η ΤΝ είναι αντικειμενική, αφού στηρίζεται σε μαθηματικά.',dir:1,ch:'Κεφ. 2 · Αλγοριθμική Μεροληψία',teaser:'Θα ανακαλύψεις πώς οι προκαταλήψεις των δεδομένων γίνονται προκαταλήψεις της μηχανής.'},
+  {text:'Αφού υπάρχουν deepfakes, δεν μπορώ πια να πιστέψω καμία φωτογραφία ή βίντεο.',dir:-1,ch:'Κεφ. 3 · Deepfakes',teaser:'Θα δεις ότι η λύση δεν είναι να μην πιστεύεις τίποτα, αλλά να ελέγχεις την πηγή.'},
+  {text:'Αν μια φωτογραφία ή ένα βίντεο μοιάζει αληθινό, πιθανότατα είναι αληθινό.',dir:1,ch:'Κεφ. 3 · Deepfakes',teaser:'Θα μάθεις να ψάχνεις τα ίχνη που προδίδουν μια ψεύτικη εικόνα.'},
+  {text:'Όσα μου προτείνουν οι εφαρμογές μου δείχνουν μια ολοκληρωμένη εικόνα του κόσμου.',dir:1,ch:'Κεφ. 4 · Η Φούσκα Φίλτρου',teaser:'Θα δεις πώς οι αλγόριθμοι προτάσεων μπορεί να σε κλείνουν σε μια «φούσκα».'},
+  {text:'Τα chatbot κάνουν τόσα λάθη που δεν αξίζει να τα χρησιμοποιώ για τίποτα.',dir:-1,ch:'Κεφ. 5 · Οι Παραισθήσεις της Μηχανής',teaser:'Θα μάθεις πότε μπορείς να βασιστείς σε ένα chatbot και πότε πρέπει να ελέγξεις.'},
+  {text:'Όταν ένα chatbot απαντά με σιγουριά, η απάντηση είναι συνήθως σωστή.',dir:1,ch:'Κεφ. 5 · Οι Παραισθήσεις της Μηχανής',teaser:'Θα καταλάβεις γιατί η ΤΝ μπορεί να «επινοεί» στοιχεία και πηγές με απόλυτη σιγουριά.'},
+  {text:'Ό,τι βρίσκεται ελεύθερα στο διαδίκτυο μπορεί να το χρησιμοποιήσει όποιος θέλει, ακόμη και μια ΤΝ.',dir:1,ch:'Κεφ. 6 · Δεδομένα, Δικαιώματα και Δημιουργία',teaser:'Θα συζητήσεις σε ποιον ανήκουν τα έργα με τα οποία «μαθαίνει» η ΤΝ.'},
+  {text:'Η ΤΝ θα αντικαταστήσει τους καλλιτέχνες και η τέχνη όπως την ξέρουμε θα χαθεί.',dir:-1,ch:'Επίλογος · Γεφυρώνοντας το Κενό',teaser:'Θα δεις τι μένει μοναδικά ανθρώπινο και πώς άνθρωπος και μηχανή μπορούν να συνυπάρξουν.'},
+  {text:'Είναι καλύτερα να μη χρησιμοποιώ καθόλου εργαλεία ΤΝ.',dir:-1,ch:'Επίλογος · Γεφυρώνοντας το Κενό',teaser:'Θα βρεις τρόπους να χρησιμοποιείς την ΤΝ με κριτική σκέψη, χωρίς να την αποφεύγεις.'}
+];
+const SCALE=[{v:0,emo:'🙅',t:'Διαφωνώ πολύ'},{v:1,emo:'🤨',t:'Διαφωνώ'},{v:2,emo:'🤔',t:'Δεν είμαι σίγουρος/η'},{v:3,emo:'🙂',t:'Συμφωνώ'},{v:4,emo:'💯',t:'Συμφωνώ πολύ'}];
+// Οι «αφετηρίες» περιγράφουν τη θέση των σημερινών απαντήσεων στη γραμμή — όχι τον άνθρωπο.
+const PROFILES={
+  fear:{name:'Επιφύλαξη',emoji:'⚠️',color:'#C0392B',motto:'«Προς το παρόν, προτιμώ να μην ανέβω στο τρένο.»',
+    text:'Οι απαντήσεις σου σήμερα δείχνουν αρκετή ανησυχία για την ΤΝ. Η προσοχή είναι χρήσιμη· όταν όμως γίνεται αποφυγή, χάνουμε τον έλεγχο εργαλείων που θα μπορούσαμε να κρίνουμε εμείς. Στο ταξίδι θα δεις πώς δουλεύει η μηχανή, για να την κρίνεις με στοιχεία.'},
+  critical:{name:'Ισορροπία',emoji:'🧭',color:'#1E8A5A',motto:'«Ανεβαίνω, αλλά κοιτάζω τον χάρτη.»',
+    text:'Οι απαντήσεις σου σήμερα βρίσκονται κοντά στη μέση της γραμμής: ούτε φόβος ούτε τυφλή εμπιστοσύνη. Στο ταξίδι θα αποκτήσεις τα εργαλεία για να στηρίζεις αυτή τη θέση με επιχειρήματα — και θα ελέγξεις αν αντέχει σε κάθε στάση.'},
+  trust:{name:'Εμπιστοσύνη',emoji:'🚀',color:'#2D6CDF',motto:'«Ανεβαίνω χωρίς να κοιτάξω πού πάει το τρένο.»',
+    text:'Οι απαντήσεις σου σήμερα δείχνουν αρκετή εμπιστοσύνη στην ΤΝ — κάτι πολύ συνηθισμένο: είναι γρήγορη και εντυπωσιακή. Όμως η ταχύτητα δεν σημαίνει πάντα ακρίβεια ή δικαιοσύνη. Στο ταξίδι θα δεις πού κρύβονται τα «κενά» της.'},
+  torn:{name:'Σταυροδρόμι',emoji:'🔀',color:'#8E44AD',motto:'«Θαυμάζω το τρένο, αλλά φοβάμαι πού θα με πάει.»',
+    text:'Οι απαντήσεις σου σήμερα δείχνουν ταυτόχρονα εμπιστοσύνη και ανησυχία. Η αντίφαση είναι πολύ ανθρώπινη — και πολύ λογική για ένα εργαλείο με τόσα πρόσωπα. Το ταξίδι θα σε βοηθήσει να ξεχωρίσεις πού αξίζει η εμπιστοσύνη και πού η προσοχή.'}
+};
+const toCode=a=>a.map(v=>v+1).join('');
+const fromCode=c=>/^[1-5]{10}$/.test(c)?c.split('').map(d=>+d-1):null;
+const STORE_KEY='mtag-eisitirio-v3';
+const sections=['s-start','s-q','s-ticket'];
+let answers=new Array(Q.length).fill(null),i=0,result=null;
+function show(id){sections.forEach(s=>$(s).hidden=s!==id);}
+function load(){try{return JSON.parse(localStorage.getItem(STORE_KEY));}catch(e){return null;}}
+function save(obj){try{localStorage.setItem(STORE_KEY,JSON.stringify(obj));}catch(e){}}
+
+function refreshStart(){
+  const stored=load();
+  if(stored&&stored.code&&fromCode(stored.code)&&PROFILES[stored.profile]){
+    $('prev-note').hidden=false;
+    $('prev-note').innerHTML=`🎫 Σε αυτή τη συσκευή βρέθηκε εισιτήριο (${esc(stored.date)}${stored.nick?', '+esc(stored.nick):''}): αφετηρία <strong>${esc(PROFILES[stored.profile].name)}</strong>, θέση ${stored.pos100}/100, κωδικός <b>${stored.code}</b>. Αν είναι δικό σου, άφησε τον κωδικό στο πεδίο για να γίνει η σύγκριση· αν είναι άλλου μαθητή, σβήσε τον.`;
+    $('code').value=stored.code;if(stored.nick&&!$('nick').value)$('nick').value=stored.nick;
+  }else{$('prev-note').hidden=true;}
+}
+refreshStart();
+
+function renderQ(){
+  const q=Q[i];
+  $('progress').innerHTML=Q.map((_,k)=>`<i class="${k<i?'done':k===i?'now':''}"></i>`).join('');
+  $('q-tag').textContent=`Δήλωση ${i+1} από ${Q.length}`;
+  $('q-text').textContent=`«${q.text}»`;
+  $('likert').innerHTML=SCALE.map(s=>`<label><input type="radio" name="lk" value="${s.v}" ${answers[i]===s.v?'checked':''}><span class="emo" aria-hidden="true">${s.emo}</span><span>${s.t}</span></label>`).join('');
+  $('likert').querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{answers[i]=Number(inp.value);$('next').disabled=false;}));
+  $('next').disabled=answers[i]===null;
+  $('next').textContent=i===Q.length-1?'Τύπωσε το εισιτήριο 🎫':'Επόμενη →';
+  $('q-text').focus({preventScroll:true});
+}
+function compute(ans=answers){
+  const tv=Q.map((q,k)=>q.dir>0?ans[k]:null).filter(v=>v!==null),fv=Q.map((q,k)=>q.dir<0?ans[k]:null).filter(v=>v!==null);
+  const trust=tv.reduce((a,b)=>a+b,0)/(tv.length*4),fear=fv.reduce((a,b)=>a+b,0)/(fv.length*4);   // 0..1
+  let profile;
+  if(trust>=0.6&&fear>=0.6)profile='torn';else if(trust-fear>=0.3)profile='trust';else if(fear-trust>=0.3)profile='fear';else profile='critical';
+  const pos=Math.max(4,Math.min(96,50+(trust-fear)*50));
+  const hot=[];Q.forEach((q,k)=>{if(ans[k]>=3&&!hot.some(h=>h.ch===q.ch))hot.push(q);});
+  return {trust,fear,profile,pos,pos100:Math.round(pos),hot,tAvg:(trust*4).toFixed(1).replace('.',','),fAvg:(fear*4).toFixed(1).replace('.',','),nT:tv.length,nF:fv.length};
+}
+function ticketNumber(){const s=answers.join('');let h=7;for(const c of s+Date.now())h=(h*31+c.charCodeAt(0))%99991;return 'Νο '+String(h).padStart(5,'0');}
+
+function showTicket(){
+  result=compute();const p=PROFILES[result.profile];const nick=$('nick').value.trim();const date=new Date().toLocaleDateString('el-GR');
+  result.nick=nick;result.date=date;result.num=ticketNumber();
+  show('s-ticket');
+  result.code=toCode(answers);
+  $('tk-who').textContent=nick?`Επιβάτης: ${nick}`:'Επιβάτης: ανώνυμος/η';
+  $('tk-profile').innerHTML=`<small>Αφετηρία σήμερα</small>${esc(p.name)}`;$('tk-profile').style.color=p.color;$('tk-motto').textContent=p.motto;$('tk-emoji').textContent=p.emoji;
+  $('tk-num').textContent=result.num;$('tk-date').textContent=date;$('tk-pos').textContent=`θέση ${result.pos100}/100`;$('tk-code').textContent=result.code;
+  $('tk-text').textContent=p.text;
+  const labels={fear:'κοντά στον φόβο',critical:'κοντά στην κριτική σκέψη',trust:'κοντά στην τυφλή εμπιστοσύνη',torn:'ανάμεσα σε εμπιστοσύνη και φόβο'};
+  $('pos-img').setAttribute('aria-label',`Η θέση σου στη γραμμή: ${result.pos100} στα 100, ${labels[result.profile]}`);
+  $('train').style.left='50%';setTimeout(()=>{$('train').style.left=result.pos+'%';},80);
+  // πώς βγήκε — καμία «μαύρη» βαθμολόγηση
+  $('how').innerHTML=`<b>Πώς βγήκε το εισιτήριο;</b> Στις ${result.nT} δηλώσεις <i>εμπιστοσύνης</i> συμφώνησες κατά μέσο όρο <b>${result.tAvg}/4</b>, στις ${result.nF} δηλώσεις <i>φόβου ή απόρριψης</i> <b>${result.fAvg}/4</b>. Θέση = 50 + (εμπιστοσύνη − φόβος) × 50 → <b>${result.pos100}</b>. Είναι ένα απλό παιχνίδι αυτογνωσίας, όχι ψυχολογικό τεστ.`;
+  // Σύγκριση με το πρώτο εισιτήριο: από κωδικό (οποιαδήποτε συσκευή) ή από τη συσκευή
+  const typed=fromCode($('code').value.trim());
+  const st=load();
+  const prevAns=typed||(st&&fromCode(st.code||'')&&st.code!==result.code?fromCode(st.code):null);
+  const second=!!prevAns&&toCode(prevAns)!==result.code;
+  if(second){
+    const old=compute(prevAns);
+    const sameDevice=st&&st.code===toCode(prevAns);
+    $('train-prev').hidden=false;$('train-prev').style.left=old.pos+'%';
+    const d=Math.abs(result.pos-50)-Math.abs(old.pos-50),shift=result.pos100-old.pos100;
+    const towards=d<=-8?'<strong>πιο κοντά στην κριτική σκέψη</strong>':d>=8?'<strong>πιο μακριά από το κέντρο</strong>':'<strong>περίπου στην ίδια θέση</strong>';
+    $('delta').innerHTML=`Αρχή: <b>${old.pos100}</b>/100 (${esc(PROFILES[old.profile].name)}${sameDevice&&st.date?', '+esc(st.date):''}) → Τώρα: <b>${result.pos100}</b>/100 (${esc(p.name)}). Μετακίνηση ${shift>0?'+':''}${shift} μονάδες, ${towards}. Το αχνό βαγόνι 🚃 στη γραμμή είναι η αρχική σου θέση.`;
+    let moved=0;
+    $('chg').innerHTML=Q.map((q,k)=>{const a=prevAns[k],b=answers[k],m=a!==b;if(m)moved++;
+      return `<li class="${m?'moved':''}" title="${esc(q.text)}"><span>${k+1}. ${esc(q.text)}</span><span class="arr" title="${SCALE[a].t} → ${SCALE[b].t}">${SCALE[a].emo} → <b>${SCALE[b].emo}</b></span></li>`;}).join('');
+    $('delta').innerHTML+=` Άλλαξες απάντηση σε <b>${moved} από ${Q.length}</b> δηλώσεις${moved?' (με κίτρινο)':''}.`;
+    if(sameDevice&&st.note){$('firstnote').hidden=false;$('firstnote').innerHTML=`<b>Στην αρχή είχες γράψει:</b> «${esc(st.note)}»`;}else $('firstnote').hidden=true;
+    $('cmpbox').hidden=false;$('first-run').hidden=true;$('later').hidden=true;
+    $('note-label').textContent='✍️ Σε μία-δύο προτάσεις: τι άλλαξε στον τρόπο που βλέπεις την ΤΝ — και ποια στάση ή δραστηριότητα του βιβλίου το προκάλεσε;';
+    $('note-hint').textContent='Αν δεν άλλαξε τίποτα, κι αυτό έχει αξία: γράψε γιατί.';
+    $('discuss').innerHTML='<strong>💬 Για την τάξη:</strong> Ποια αλλαγή σε εκπλήσσει περισσότερο; Συγκρίνετε με διπλανούς: μετακινηθήκατε προς την ίδια κατεύθυνση;';
+  }else{
+    $('train-prev').hidden=true;$('cmpbox').hidden=true;$('first-run').hidden=false;$('later').hidden=false;$('firstnote').hidden=true;
+    const hot=result.hot,list=hot.length?hot:[Q[0],Q[6]];
+    $('stations').innerHTML=(hot.length?'':`<li style="display:block;background:transparent;border:0;padding:0" class="small">Δεν συμφώνησες με καμία δήλωση. Ξεκίνα από αυτές τις δύο στάσεις, που κρύβουν τις περισσότερες εκπλήξεις:</li>`)+
+      list.map(q=>`<li><span class="dot ${hot.length?'hot':''}" aria-hidden="true"></span><span><b>${esc(q.ch)}</b>${esc(q.teaser)}</span></li>`).join('');
+    $('note-label').textContent='✍️ Σε μία πρόταση: τι περιμένεις να έχεις καταλάβει για την ΤΝ όταν φτάσεις στον Επίλογο;';
+    $('note-hint').textContent='Θα σου εμφανιστεί ξανά όταν συγκρίνεις τα δύο εισιτήρια (στην ίδια συσκευή).';
+    $('discuss').innerHTML='<strong>💬 Για την τάξη:</strong> Σε ποια δήλωση δυσκολεύτηκες περισσότερο να αποφασίσεις; Γιατί;';
+  }
+  $('note').value='';
+  result.second=second;result.prevAns=prevAns;
+  save({profile:result.profile,pos:result.pos,pos100:result.pos100,date,nick,answers,code:result.code,note:''});
+  $('live').textContent=`Το εισιτήριό σου: αφετηρία ${p.name}, θέση ${result.pos100} στα 100. ${p.text}`;
+  $('t-ticket').focus({preventScroll:true});
+}
+$('note').addEventListener('input',()=>{const st=load()||{};st.note=$('note').value.trim();save(st);});
+
+/* εικόνα εισιτηρίου */
+function wrapText(ctx,text,x,y,maxW,lh){const words=text.split(' ');let line='';for(const w of words){const t=line?line+' '+w:w;if(ctx.measureText(t).width>maxW&&line){ctx.fillText(line,x,y);line=w;y+=lh;}else line=t;}ctx.fillText(line,x,y);return y+lh;}
+function downloadTicket(){
+  const p=PROFILES[result.profile],W=1000,H=540,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#fff8dc');g.addColorStop(1,'#ffe9a0');x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.strokeStyle='#1c2340';x.lineWidth=6;x.strokeRect(3,3,W-6,H-6);x.setLineDash([14,10]);x.beginPath();x.moveTo(760,20);x.lineTo(760,H-20);x.stroke();x.setLineDash([]);
+  const F="system-ui,'Segoe UI',Arial,sans-serif";
+  x.fillStyle='#1d3a8a';x.font=`800 22px ${F}`;x.fillText('MIND THE ART GAP · ΕΙΣΙΤΗΡΙΟ',40,60);
+  x.fillStyle='#5b6380';x.font=`20px ${F}`;x.fillText(result.nick?`Επιβάτης: ${result.nick}`:'Επιβάτης: ανώνυμος/η',40,96);
+  x.fillStyle='#5b6380';x.font=`700 16px ${F}`;x.fillText('ΑΦΕΤΗΡΙΑ ΣΗΜΕΡΑ',40,128);x.fillStyle=p.color;x.font=`800 44px ${F}`;x.fillText(p.name,40,172);
+  x.fillStyle='#1c2340';x.font=`italic 22px ${F}`;x.fillText(p.motto,40,208);
+  const lx=40,lw=680,ly=290;const lg=x.createLinearGradient(lx,0,lx+lw,0);lg.addColorStop(0,'#c0392b');lg.addColorStop(.5,'#1e8a5a');lg.addColorStop(1,'#2d6cdf');
+  x.fillStyle=lg;x.fillRect(lx,ly-7,lw,14);const tx=lx+lw*result.pos/100;
+  x.fillStyle='#fff';x.beginPath();x.arc(tx,ly,20,0,Math.PI*2);x.fill();x.lineWidth=5;x.strokeStyle='#1c2340';x.stroke();
+  x.font=`700 18px ${F}`;x.fillStyle='#c0392b';x.fillText('Φόβος · 0',lx,ly+48);x.fillStyle='#1e8a5a';x.textAlign='center';x.fillText('Κριτική σκέψη · 50',lx+lw/2,ly+48);x.fillStyle='#2d6cdf';x.textAlign='right';x.fillText('Τυφλή εμπιστοσύνη · 100',lx+lw,ly+48);x.textAlign='left';
+  x.fillStyle='#1c2340';x.font=`700 18px ${F}`;x.fillText(result.second?'Μετακίνηση από το πρώτο εισιτήριο:':'Στάσεις με ιδιαίτερη προσοχή:',40,400);x.font=`18px ${F}`;
+  wrapText(x,result.second?`${compute(result.prevAns).pos100} → ${result.pos100} στα 100`:(result.hot.length?result.hot:[Q[0],Q[6]]).map(q=>q.ch.split(' · ')[0]).join(' · '),40,430,690,26);
+  x.textAlign='center';x.font=`64px ${F}`;x.fillText(p.emoji,880,190);
+  x.font=`700 22px ui-monospace,Consolas,monospace`;x.fillText(result.num,880,250);x.fillText(result.date,880,285);x.fillText(`θέση ${result.pos100}/100`,880,320);
+  x.font=`700 20px ui-monospace,Consolas,monospace`;x.fillText('κωδικός',880,370);x.fillText(result.code,880,398);
+  x.font=`16px ${F}`;x.fillStyle='#5b6380';x.fillText('Στάση 00 → Επίλογος',880,440);x.textAlign='left';
+  c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='eisitirio-mind-the-art-gap.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);});
+}
+
+$('go').addEventListener('click',()=>{answers=new Array(Q.length).fill(null);i=0;show('s-q');renderQ();});
+$('next').addEventListener('click',()=>{if(answers[i]===null)return;if(i<Q.length-1){i++;renderQ();}else showTicket();});
+$('back').addEventListener('click',()=>{if(i>0){i--;renderQ();}else{show('s-start');$('t-start').focus({preventScroll:true});}});
+$('again').addEventListener('click',()=>{refreshStart();show('s-start');$('t-start').focus({preventScroll:true});});
+$('dl').addEventListener('click',downloadTicket);
+document.addEventListener('keydown',e=>{
+  if($('s-q').hidden||e.target.closest('input,textarea'))return;
+  const n=Number(e.key);
+  if(n>=1&&n<=5){const inp=$('likert').querySelectorAll('input')[n-1];inp.checked=true;inp.dispatchEvent(new Event('change'));inp.focus({preventScroll:true});}
+  else if(e.key==='Enter'&&!$('next').disabled&&document.activeElement.tagName!=='BUTTON'){e.preventDefault();$('next').click();}
+});
+</script>
+</body>
+</html>
