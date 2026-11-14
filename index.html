@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MIND THE ART GAP · Δραστηριότητες</title>
+<style>
+body{margin:0;background:#F6F1E4;color:#1C2340;font-family:"Ubuntu","Segoe UI",system-ui,sans-serif;font-size:17px;line-height:1.5}
+main{max-width:720px;margin:0 auto;padding:40px 20px 56px}
+h1{font-family:"Comfortaa","Trebuchet MS",sans-serif;font-size:28px;margin:0 0 4px;color:#1D3A8A}
+.sub{color:#5B6380;margin:0 0 28px}
+ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+li a{display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:center;background:#FFFDF7;border:1px solid #D9D1BB;border-radius:12px;padding:14px 16px;text-decoration:none;color:inherit}
+li a:hover{border-color:#1D3A8A;background:#fff}
+.n{font-family:"Comfortaa","Trebuchet MS",sans-serif;font-size:22px;font-weight:700;color:#1D3A8A;text-align:center}
+b{display:block;font-size:18px}
+span{color:#5B6380;font-size:14.5px}
+details{margin-top:28px;font-size:14px;color:#5B6380}
+summary{cursor:pointer;font-weight:700;color:#1D3A8A}
+code{display:block;margin-top:8px;padding:10px 12px;background:#fff;border:1px solid #D9D1BB;border-radius:8px;font-size:13px;word-break:break-all}
+footer{margin-top:28px;font-size:13px;color:#5B6380}
+</style>
+</head>
+<body>
+<main>
+  <h1>MIND THE ART GAP</h1>
+  <p class="sub">Διαδραστικές δραστηριότητες του βιβλίου, μία ανά στάση.</p>
+  <ol>
+    <li><a href="eisitirio.html"><span class="n">00</span><div><b>Το εισιτήριο του ταξιδιού</b><span>Από ποια αποβάθρα ξεκινάς; Φόβος, κριτική σκέψη ή τυφλή εμπιστοσύνη;</span></div></a></li>
+    <li><a href="rota.html"><span class="n">01</span><div><b>Ρώτα την εικόνα</b><span>Ο πίνακας απαντά με πινελιές και επιστολές· η εικόνα ΤΝ μόνο με αριθμούς.</span></div></a></li>
+    <li><a href="paleta.html"><span class="n">02</span><div><b>Η παλέτα των «Πατατοφάγων»</b><span>Κουίζ: ποια είναι η πραγματική παλέτα του πίνακα;</span></div></a></li>
+    <li><a href="kathreftis.html"><span class="n">02</span><div><b>Ο καθρέφτης του διαδικτύου</b><span>Τι δείχνει το διαδίκτυο, τι φτιάχνει η ΤΝ, και τι λείπει και από τα δύο.</span></div></a></li>
+    <li><a href="ereunitis.html"><span class="n">03</span><div><b>Ερευνητής ψηφιακών εικόνων</b><span>Πέντε εικόνες: σημάδια, πηγή, αναζήτηση, μεταδεδομένα, σχόλια. Βαθμολογείται η πληρότητα της έρευνας, όχι η μαντεψιά.</span></div></a></li>
+    <li><a href="like.html"><span class="n">04</span><div><b>Προσομοιωτής «Like»</b><span>Ένας φανερός αλγόριθμος μαθαίνει από τα like σου. Πόσο στενεύει η ροή σου;</span></div></a></li>
+  </ol>
+  <details>
+    <summary>Ενσωμάτωση σε άλλη σελίδα</summary>
+    <p>Κάθε δραστηριότητα μπαίνει σε πλαίσιο 16:9 με τον κώδικα (αντικαταστήστε το όνομα του αρχείου):</p>
+    <code id="code"></code>
+  </details>
+  <footer>Έργα: Vincent van Gogh, κοινό κτήμα. Οι εφαρμογές, οι αναρτήσεις και οι λογαριασμοί στις δραστηριότητες είναι φανταστικά.</footer>
+</main>
+<script>
+document.getElementById('code').textContent='<iframe src="'+location.href.replace(/[^/]*$/,'')+'like.html" width="1200" height="675" style="border:0" allowfullscreen></iframe>';
+</script>
+</body>
+</html>
