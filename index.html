@@ -3,28 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MIND THE ART GAP · Δραστηριότητες</title>
+<title>MIND THE ART GAP · Δραστηριότητες και βίντεο</title>
 <style>
 body{margin:0;background:#F6F1E4;color:#1C2340;font-family:"Ubuntu","Segoe UI",system-ui,sans-serif;font-size:17px;line-height:1.5}
 main{max-width:720px;margin:0 auto;padding:40px 20px 56px}
 h1{font-family:"Comfortaa","Trebuchet MS",sans-serif;font-size:28px;margin:0 0 4px;color:#1D3A8A}
-.sub{color:#5B6380;margin:0 0 28px}
+h2{font-family:"Comfortaa","Trebuchet MS",sans-serif;font-size:20px;margin:36px 0 12px;color:#1D3A8A}
+.sub{color:#5B6380;margin:0 0 20px}
 ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
 li a{display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:center;background:#FFFDF7;border:1px solid #D9D1BB;border-radius:12px;padding:14px 16px;text-decoration:none;color:inherit}
-li a:hover{border-color:#1D3A8A;background:#fff}
+li a:hover,li a:focus-visible{border-color:#1D3A8A;background:#fff}
 .n{font-family:"Comfortaa","Trebuchet MS",sans-serif;font-size:22px;font-weight:700;color:#1D3A8A;text-align:center}
 b{display:block;font-size:18px}
 span{color:#5B6380;font-size:14.5px}
+.meta{display:block;margin-top:3px;font-size:13px;color:#1D3A8A}
+.meta::before{content:"▶";font-size:11px;margin-right:6px}
 details{margin-top:28px;font-size:14px;color:#5B6380}
 summary{cursor:pointer;font-weight:700;color:#1D3A8A}
 code{display:block;margin-top:8px;padding:10px 12px;background:#fff;border:1px solid #D9D1BB;border-radius:8px;font-size:13px;word-break:break-all}
 footer{margin-top:28px;font-size:13px;color:#5B6380}
+dialog{width:min(1000px,94vw);padding:0;border:0;border-radius:14px;background:#1C2340;color:#fff;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(28,35,64,.72)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px 10px 16px}
+.bar strong{font-size:16px;font-weight:600}
+.bar button{flex:none;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:18px;cursor:pointer}
+.bar button:hover,.bar button:focus-visible{background:rgba(255,255,255,.25)}
+dialog video{display:block;width:100%;aspect-ratio:16/9;background:#000}
+.hint{margin:0;padding:8px 16px 12px;font-size:13px;color:#C9CFE6}
 </style>
 </head>
 <body>
 <main>
   <h1>MIND THE ART GAP</h1>
-  <p class="sub">Διαδραστικές δραστηριότητες του βιβλίου, μία ανά στάση.</p>
+  <p class="sub">Διαδραστικές δραστηριότητες και σύντομα βίντεο του βιβλίου, ανά στάση.</p>
+
+  <h2>Δραστηριότητες</h2>
   <ol>
     <li><a href="eisitirio.html"><span class="n">00</span><div><b>Το εισιτήριο του ταξιδιού</b><span>Από ποια αποβάθρα ξεκινάς; Φόβος, κριτική σκέψη ή τυφλή εμπιστοσύνη;</span></div></a></li>
     <li><a href="rota.html"><span class="n">01</span><div><b>Ρώτα την εικόνα</b><span>Ο πίνακας απαντά με πινελιές και επιστολές· η εικόνα ΤΝ μόνο με αριθμούς.</span></div></a></li>
@@ -33,15 +46,82 @@ footer{margin-top:28px;font-size:13px;color:#5B6380}
     <li><a href="ereunitis.html"><span class="n">03</span><div><b>Ερευνητής ψηφιακών εικόνων</b><span>Πέντε εικόνες: σημάδια, πηγή, αναζήτηση, μεταδεδομένα, σχόλια. Βαθμολογείται η πληρότητα της έρευνας, όχι η μαντεψιά.</span></div></a></li>
     <li><a href="like.html"><span class="n">04</span><div><b>Προσομοιωτής «Like»</b><span>Ένας φανερός αλγόριθμος μαθαίνει από τα like σου. Πόσο στενεύει η ροή σου;</span></div></a></li>
   </ol>
+
+  <h2>Βίντεο</h2>
+  <ol>
+    <li><a id="mavro-kouti" href="Mavro_Kouti.mp4" data-vtt="Mavro_Kouti.el.vtt"><span class="n">01</span><div><b>Τι συμβαίνει μέσα στο «μαύρο κουτί»;</b><span>Βλέπουμε τι μπαίνει και τι βγαίνει, όχι πώς φτάνει από το ένα στο άλλο.</span><span class="meta">0:39 · σελ. 7</span></div></a></li>
+    <li><a id="xai" href="XAI.mp4" data-vtt="XAI.el.vtt"><span class="n">01</span><div><b>Μπορούμε να ανοίξουμε το «μαύρο κουτί»;</b><span>Τι μπορεί να μας δείξει η Επεξηγήσιμη ΤΝ, και τι όχι.</span><span class="meta">1:01 · σελ. 8</span></div></a></li>
+    <li><a id="patatofagoi" href="Patatofagoi.mp4" data-vtt="Patatofagoi.el.vtt"><span class="n">02</span><div><b>Πριν γεννηθεί ο πίνακας — Οι Πατατοφάγοι</b><span>Τρεις μελέτες του Van Gogh: η δημιουργία αρχίζει πριν από την πρώτη πινελιά.</span><span class="meta">0:42 · σελ. 14</span></div></a></li>
+    <li><a id="deepfake" href="Deepfake.mp4" data-vtt="Deepfake.el.vtt"><span class="n">03</span><div><b>Μπορούμε πάντα να εμπιστευόμαστε τα μάτια μας;</b><span>Μια εικόνα μπορεί να ξεγελάσει· τα σημάδια δεν είναι αποδείξεις· έλεγξε πέρα από την εικόνα.</span><span class="meta">1:08 · σελ. 19</span></div></a></li>
+    <li><a id="lathi-anameixis" href="Lathi_Anameixis.mp4" data-vtt="Lathi_Anameixis.el.vtt"><span class="n">03</span><div><b>Λάθη ανάμειξης — Κοίτα προσεκτικά τα όρια</b><span>Ζουμ σε ένα αχλάδι που «λιώνει» στην κούπα και στο καπέλο του Van Gogh.</span><span class="meta">1:17 · σελ. 20</span></div></a></li>
+    <li><a id="fouska" href="%CE%A0%CF%8E%CF%82%20%CF%86%CE%BF%CF%85%CF%83%CE%BA%CF%8E%CE%BD%CE%B5%CE%B9%20%CE%B7%20%CF%86%CE%BF%CF%8D%CF%83%CE%BA%CE%B1%3B.mp4" data-vtt="Fouska.el.vtt"><span class="n">04</span><div><b>Πώς φουσκώνει η φούσκα;</b><span>Τέσσερα βήματα: από ένα like σε όλο και λιγότερη ποικιλία.</span><span class="meta">0:43 · σελ. 23</span></div></a></li>
+    <li><a id="hiroshige-van-gogh" href="Hiroshige_VanGogh.mp4" data-vtt="Hiroshige_VanGogh.el.vtt"><span class="n">04</span><div><b>Από την έμπνευση στη δημιουργία</b><span>Πώς μια ιαπωνική ξυλογραφία του Hiroshige έγινε πίνακας του Van Gogh.</span><span class="meta">0:50 · σελ. 25</span></div></a></li>
+  </ol>
+
   <details>
     <summary>Ενσωμάτωση σε άλλη σελίδα</summary>
     <p>Κάθε δραστηριότητα μπαίνει σε πλαίσιο 16:9 με τον κώδικα (αντικαταστήστε το όνομα του αρχείου):</p>
     <code id="code"></code>
+    <p>Κάθε βίντεο, με υπότιτλους, μπαίνει με τον κώδικα (αντικαταστήστε τα ονόματα των αρχείων):</p>
+    <code id="code-video"></code>
+    <p>Για να ανοίξει ένα βίντεο κατευθείαν από αυτή τη σελίδα, προσθέστε στο τέλος της διεύθυνσης το #όνομά του, π.χ. <span id="deeplink"></span>.</p>
   </details>
-  <footer>Έργα: Vincent van Gogh, κοινό κτήμα. Οι εφαρμογές, οι αναρτήσεις και οι λογαριασμοί στις δραστηριότητες είναι φανταστικά.</footer>
+  <footer>Έργα: Vincent van Gogh και Utagawa Hiroshige, κοινό κτήμα. Οι εφαρμογές, οι αναρτήσεις και οι λογαριασμοί στις δραστηριότητες είναι φανταστικά. Η αφήγηση των βίντεο είναι συνθετική φωνή (ElevenLabs).</footer>
 </main>
+
+<dialog id="player" aria-labelledby="player-title">
+  <div class="bar"><strong id="player-title"></strong><button type="button" id="player-close" aria-label="Κλείσιμο">✕</button></div>
+  <video id="player-video" controls playsinline preload="metadata"></video>
+  <p class="hint">Υπότιτλοι: κουμπί CC στο πρόγραμμα αναπαραγωγής.</p>
+</dialog>
+
 <script>
-document.getElementById('code').textContent='<iframe src="'+location.href.replace(/[^/]*$/,'')+'like.html" width="1200" height="675" style="border:0" allowfullscreen></iframe>';
+var base = location.href.replace(/[#?].*$/, '').replace(/[^/]*$/, '');
+document.getElementById('code').textContent =
+  '<iframe src="' + base + 'like.html" width="1200" height="675" style="border:0" allowfullscreen></iframe>';
+document.getElementById('code-video').textContent =
+  '<video src="' + base + 'Deepfake.mp4" controls playsinline width="1200" style="max-width:100%" crossorigin="anonymous">' +
+  '<track kind="captions" src="' + base + 'Deepfake.el.vtt" srclang="el" label="Ελληνικά"></video>';
+document.getElementById('deeplink').textContent = base + 'index.html#deepfake';
+
+var dlg = document.getElementById('player');
+var vid = document.getElementById('player-video');
+var title = document.getElementById('player-title');
+var lastLink = null;
+
+function openVideo(a) {
+  lastLink = a;
+  title.textContent = a.querySelector('b').textContent;
+  vid.innerHTML = '';
+  if (a.dataset.vtt) {
+    var t = document.createElement('track');
+    t.kind = 'captions'; t.srclang = 'el'; t.label = 'Ελληνικά'; t.src = a.dataset.vtt;
+    vid.appendChild(t);
+  }
+  vid.src = a.getAttribute('href');
+  if (typeof dlg.showModal === 'function') { dlg.showModal(); } else { location.href = a.getAttribute('href'); return; }
+  var p = vid.play(); if (p && p.catch) p.catch(function () {});
+  history.replaceState(null, '', '#' + a.id);
+}
+
+document.querySelectorAll('a[data-vtt]').forEach(function (a) {
+  a.addEventListener('click', function (e) {
+    if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return; // new tab etc. still open the file
+    e.preventDefault();
+    openVideo(a);
+  });
+});
+document.getElementById('player-close').addEventListener('click', function () { dlg.close(); });
+dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+dlg.addEventListener('close', function () {
+  vid.pause(); vid.removeAttribute('src'); vid.innerHTML = ''; vid.load();
+  history.replaceState(null, '', location.pathname + location.search);
+  if (lastLink) lastLink.focus();
+});
+if (location.hash) {
+  var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (target && target.dataset && target.dataset.vtt) openVideo(target);
+}
 </script>
 </body>
 </html>
