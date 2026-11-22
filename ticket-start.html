@@ -113,13 +113,6 @@
   .footerline { display: flex; justify-content: space-between; gap: 10px; margin-top: 12px; color: var(--gold);
     font: 700 9.5px Arial, sans-serif; letter-spacing: .13em; text-transform: uppercase; }
   .live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  /* Προβολή του εισιτηρίου ως εικόνα (για iframe που δεν επιτρέπουν λήψεις) */
-  .shot { position: absolute; inset: 0; z-index: 5; background: rgba(5,15,40,.94); display: grid; place-items: center; padding: 18px 40px; }
-  .shot-box { width: 100%; max-width: 820px; }
-  .shot-box img { width: 100%; display: block; border-radius: 12px; box-shadow: 0 14px 40px rgba(0,0,0,.5); margin-bottom: 10px; }
-  .shot-box .nav { max-width: 600px; margin: 0 auto; }
-  .shot-box .nav .btn { flex: 1; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; min-height: 46px; }
-
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
   /* Εκτύπωση: λευκή σελίδα, σκούρα γράμματα, έντονα χρώματα σε κάρτα/γραμμή/μπάρες */
   @media print {
@@ -236,24 +229,13 @@
       <ul class="chips" id="stations"></ul>
       <div class="box" id="discuss"></div>
       <div class="actions no-print">
-        <button class="btn" id="dl" type="button">⬇️ Αποθήκευση</button>
-        <button class="btn sec" id="print" type="button">🖨️ Εκτύπωση</button>
+        <button class="btn" id="print" type="button">🖨️ Εκτύπωση</button>
         <button class="btn sec" id="again" type="button">🔄 Ξανά</button>
       </div>
       <div class="footerline"><span>Χωρίς φόβο · χωρίς τυφλή εμπιστοσύνη</span><span>Προσοχή στο κενό!</span></div>
     </div>
   </section>
 
-  <div id="shot" class="shot no-print" hidden role="dialog" aria-modal="true" aria-label="Το εισιτήριό σου ως εικόνα">
-    <div class="shot-box">
-      <img id="shot-img" alt="Το εισιτήριό σου ως εικόνα">
-      <div class="nav">
-        <a class="btn" id="shot-dl" href="#" role="button">⬇️ Λήψη</a>
-        <button class="btn sec" id="shot-print" type="button">🖨️ Εκτύπωση</button>
-        <button class="btn sec" id="shot-close" type="button">Κλείσιμο</button>
-      </div>
-    </div>
-  </div>
   <div aria-live="polite" id="live" class="live"></div>
 </div></div>
 
@@ -480,49 +462,6 @@
     $("t-ticket").focus();
   }
 
-  // Αποθήκευση ως εικόνα PNG
-  function downloadTicket() {
-    const L = LEAN[result.lean];
-    const W = 1000, H = 640, c = document.createElement("canvas");
-    c.width = W; c.height = H; const x = c.getContext("2d");
-    const F = "Arial, 'Segoe UI', sans-serif", S = "Georgia, 'Times New Roman', serif";
-    x.fillStyle = "#102653"; x.fillRect(0, 0, W, H);
-    x.strokeStyle = "#e9ba4a"; x.lineWidth = 4; x.strokeRect(20, 20, W - 40, H - 40);
-    x.fillStyle = "#e9ba4a"; x.font = `700 19px ${F}`; x.fillText("✦ MIND THE ART GAP · " + T.brand, 60, 75);
-    x.fillStyle = "#fff8e9"; x.font = `700 40px ${S}`; x.fillText(T.png, 60, 130);
-    x.fillStyle = "#d9e0ed"; x.font = `22px ${F}`; x.fillText(result.nick ? `Επιβάτης: ${result.nick}` : "Επιβάτης: ανώνυμος/η", 60, 168);
-    x.fillStyle = "#fff8e9"; x.font = `700 26px ${F}`; x.fillText(L.lean, 60, 225);
-    x.fillStyle = "#f3c34e"; x.font = `italic 22px ${F}`; x.fillText("«" + (END ? L.qEnd : L.q) + "»", 60, 262);
-    const lx = 60, lw = 880, ly = 330;
-    const lg = x.createLinearGradient(lx, 0, lx + lw, 0); lg.addColorStop(0, "#ff8a7a"); lg.addColorStop(.5, "#5fd3a8"); lg.addColorStop(1, "#7db8ff");
-    x.fillStyle = lg; x.fillRect(lx, ly - 7, lw, 14);
-    if (oldAnswers) { const op = lx + lw * compute(oldAnswers).pos / 100; x.fillStyle = "#fff8e9"; x.globalAlpha = .55; x.beginPath(); x.arc(op, ly, 17, 0, Math.PI * 2); x.fill(); x.globalAlpha = 1; x.setLineDash([5, 4]); x.lineWidth = 4; x.strokeStyle = "#102653"; x.stroke(); x.setLineDash([]); }
-    const tx = lx + lw * result.pos / 100;
-    x.fillStyle = "#fff8e9"; x.beginPath(); x.arc(tx, ly, 20, 0, Math.PI * 2); x.fill(); x.lineWidth = 5; x.strokeStyle = "#102653"; x.stroke();
-    x.font = `700 17px ${F}`; x.fillStyle = "#ff8a7a"; x.fillText("Φόβος", lx, ly + 42);
-    x.fillStyle = "#5fd3a8"; x.textAlign = "center"; x.fillText("Κριτική σκέψη", lx + lw / 2, ly + 42);
-    x.fillStyle = "#7db8ff"; x.textAlign = "right"; x.fillText("Τυφλή εμπιστοσύνη", lx + lw, ly + 42); x.textAlign = "left";
-    BARS.forEach(([k, n, col], j) => {
-      const y = 420 + j * 44;
-      x.fillStyle = "#f6e8c4"; x.font = `18px ${F}`; x.fillText(n.replace(/^\S+\s/, ""), 60, y + 6);
-      x.fillStyle = "#28446c"; x.fillRect(260, y - 6, 480, 14);
-      x.fillStyle = col; x.fillRect(260, y - 6, 480 * result[k], 14);
-      x.fillStyle = "#fff8e9"; x.textAlign = "right"; x.fillText(Math.round(result[k] * 100) + "%", 800, y + 6); x.textAlign = "left";
-    });
-    x.textAlign = "right"; x.fillStyle = "#e9ba4a"; x.font = `700 14px ${F}`; x.fillText(T.codeLabel, 940, 440);
-    x.fillStyle = "#fff8e9"; x.font = `700 40px ui-monospace, Consolas, monospace`; x.fillText(result.code, 940, 485);
-    x.fillStyle = "#d9e0ed"; x.font = `18px ui-monospace, Consolas, monospace`; x.fillText(result.date, 940, 515); x.textAlign = "left";
-    x.fillStyle = "#e9ba4a"; x.font = `700 16px ${F}`; x.fillText("Χωρίς φόβο · χωρίς τυφλή εμπιστοσύνη · Προσοχή στο κενό!", 60, 592);
-    const name = "MIND_THE_ART_GAP_" + (END ? "deltio_exodou_" : "eisitirio_") + result.code + ".png";
-    const url = c.toDataURL("image/png");
-    $("shot-img").src = url;
-    $("shot-dl").href = url; $("shot-dl").download = name;
-    $("shot").hidden = false; $("shot-close").focus();
-  }
-  $("shot-close").addEventListener("click", () => { $("shot").hidden = true; $("dl").focus(); });
-  $("shot-print").addEventListener("click", () => window.print());
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("shot").hidden) { $("shot").hidden = true; $("dl").focus(); } });
-
   $("go").addEventListener("click", () => {
     oldAnswers = null; $("code-err").textContent = "";
     if (END) {
@@ -537,7 +476,6 @@
   $("next").addEventListener("click", () => { clearTimeout(timer); goNext(); });
   $("back").addEventListener("click", () => { clearTimeout(timer); if (i > 0) { i--; renderQ(); } else { show("s-start"); $("t-start").focus(); } });
   $("again").addEventListener("click", () => { show("s-start"); $("t-start").focus(); });
-  $("dl").addEventListener("click", downloadTicket);
   $("print").addEventListener("click", () => window.print());
 
   document.addEventListener("keydown", e => {
