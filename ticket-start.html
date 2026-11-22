@@ -113,6 +113,12 @@
   .footerline { display: flex; justify-content: space-between; gap: 10px; margin-top: 12px; color: var(--gold);
     font: 700 9.5px Arial, sans-serif; letter-spacing: .13em; text-transform: uppercase; }
   .live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  /* Προβολή του εισιτηρίου ως εικόνα (για iframe που δεν επιτρέπουν λήψεις) */
+  .shot { position: absolute; inset: 0; z-index: 5; background: rgba(5,15,40,.94); display: grid; place-items: center; padding: 18px 40px; }
+  .shot-box { width: 100%; max-width: 820px; }
+  .shot-box img { width: 100%; display: block; border-radius: 12px; box-shadow: 0 14px 40px rgba(0,0,0,.5); margin-bottom: 10px; }
+  .shot-box p { color: var(--ink); font-size: .95rem; margin: 0 0 10px; text-align: center; }
+  .shot-box .nav { max-width: 520px; margin: 0 auto; }
 
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
   /* Εκτύπωση: λευκή σελίδα, σκούρα γράμματα, έντονα χρώματα σε κάρτα/γραμμή/μπάρες */
@@ -238,6 +244,13 @@
     </div>
   </section>
 
+  <div id="shot" class="shot no-print" hidden role="dialog" aria-modal="true" aria-labelledby="shot-txt">
+    <div class="shot-box">
+      <img id="shot-img" alt="Το εισιτήριό σου ως εικόνα">
+      <p id="shot-txt">Για να την κρατήσεις: <strong>δεξί κλικ</strong> ή <strong>παρατεταμένο πάτημα</strong> πάνω στην εικόνα → «Αποθήκευση εικόνας». Ή τράβηξε στιγμιότυπο οθόνης.</p>
+      <div class="nav"><button class="btn" id="shot-close" type="button">Κλείσιμο</button></div>
+    </div>
+  </div>
   <div aria-live="polite" id="live" class="live"></div>
 </div></div>
 
@@ -497,13 +510,32 @@
     x.fillStyle = "#fff8e9"; x.font = `700 40px ui-monospace, Consolas, monospace`; x.fillText(result.code, 940, 485);
     x.fillStyle = "#d9e0ed"; x.font = `18px ui-monospace, Consolas, monospace`; x.fillText(result.date, 940, 515); x.textAlign = "left";
     x.fillStyle = "#e9ba4a"; x.font = `700 16px ${F}`; x.fillText("Χωρίς φόβο · χωρίς τυφλή εμπιστοσύνη · Προσοχή στο κενό!", 60, 592);
-    c.toBlob(b => {
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(b); a.download = "MIND_THE_ART_GAP_eisitirio_" + (END ? "epilogos_" : "afetiria_") + result.code + ".png";
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    });
+    const name = "MIND_THE_ART_GAP_" + (END ? "deltio_exodou_" : "eisitirio_") + result.code + ".png";
+    const url = c.toDataURL("image/png");
+    // 1) Απλό pop-up με την εικόνα (+ Λήψη / Εκτύπωση). Πρέπει να ανοίξει συγχρονισμένα μέσα στο κλικ.
+    let w = null;
+    try {
+      w = window.open("", "_blank");
+      if (w) {
+        w.document.open();
+        w.document.write('<!DOCTYPE html><html lang="el"><head><meta charset="utf-8"><title>' + name + '</title>'
+          + '<style>body{margin:0;min-height:100vh;background:#0b1c3d;display:grid;place-items:center;font-family:Arial,sans-serif;color:#f7f1e4}'
+          + '.w{text-align:center;padding:16px}img{max-width:96vw;max-height:78vh;border-radius:10px;box-shadow:0 14px 40px rgba(0,0,0,.5)}'
+          + 'p{margin:12px 0 0;font-size:15px}a,button{font:700 15px Arial,sans-serif;color:#14264a;background:linear-gradient(135deg,#f7d36c,#e6aa2e);border:0;border-radius:999px;padding:10px 18px;margin:8px 6px 0;text-decoration:none;cursor:pointer;display:inline-block}'
+          + '@media print{body{background:#fff}p{display:none}img{max-width:100%;max-height:none;box-shadow:none}}</style></head><body><div class="w">'
+          + '<img src="' + url + '" alt="' + name + '">'
+          + '<p>Για να την κρατήσεις: δεξί κλικ ή παρατεταμένο πάτημα πάνω στην εικόνα → «Αποθήκευση εικόνας».<br>'
+          + '<a download="' + name + '" href="' + url + '">⬇️ Λήψη</a><button onclick="window.print()">🖨️ Εκτύπωση</button></p></div></body></html>');
+        w.document.close();
+        return;
+      }
+    } catch (e) { try { if (w) w.close(); } catch (_) {} }
+    // 2) Αν το pop-up μπλοκαριστεί: προβολή μέσα στη σελίδα
+    $("shot-img").src = url;
+    $("shot").hidden = false; $("shot-close").focus();
   }
+  $("shot-close").addEventListener("click", () => { $("shot").hidden = true; $("dl").focus(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("shot").hidden) { $("shot").hidden = true; $("dl").focus(); } });
 
   $("go").addEventListener("click", () => {
     oldAnswers = null; $("code-err").textContent = "";
